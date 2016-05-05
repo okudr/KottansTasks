@@ -80,25 +80,49 @@ namespace TASK_123
         else return false;  
     }
     
-/*
-    public static string GenerateNextCreditCardNumber(string number)
+//
+    public static string GenerateNextCreditCardNumber(string next_number)
     {    
-        int N = number.Length;
-        for (int i = 1; i <= N ; i++)
-            if (number[N-i]==' ')
-                { number=number.Remove(N-i, 1);
+        int p, i;
+        int N = next_number.Length;
+        for (i = 1; i <= N ; i++)
+            if (next_number[N-i]==' ')
+                { next_number = next_number.Remove(N-i, 1);
                   N--;
                   i--;
                 }
+        i = 0;        
+        do
+        {
+            p = next_number[N-1] - '0' + 1;
+            if (p==10)
+                { 
+                  next_number=next_number.Remove(N-1,1);                   
+                  next_number=next_number.Insert(N-1,"0");
+                  i++;
+                  p = next_number[N-1-i] - '0' + 1;
+                  next_number=next_number.Remove(N-1-i,1);                
+                  next_number=next_number.Insert(N-1-i,Convert.ToString(p));
+                  //break;
+                }
+            else
+                {
+                  next_number=next_number.Insert(N-1,Convert.ToString(p));
+                  next_number=next_number.Remove(N,1);
+
+                }
+            //Console.WriteLine("next="+Convert.ToString(p));
+            //Console.WriteLine("="+next_number);
+            if (i>N) break;
+        }
+        while(IsCreditCardNumberValid(next_number)==false);
+        return next_number;
+    }  
         
-        number=number.Insert(N-1,Convert.ToString(sum));
-        number=number.Remove(N,1);
-        
-        
-*/        
+//        
         public static void Main(string[] args)
         {
-            string card = "4561 2612 1234 5467"; // test = "5533 1111 2222 3333"
+            string card = "4561 2612 1234 5459"; // test = "5533 1111 2222 3333"
             
             Console.WriteLine("Vendor of credit card '" + card + "' is:");
             Console.WriteLine(GetCreditCardVendor(card));
