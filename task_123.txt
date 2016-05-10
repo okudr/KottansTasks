@@ -19,6 +19,8 @@ namespace TASK_123
                   N--;
                   i--;
                 }
+        if (IsCreditCardNumberValid(card_number)==false)
+            return "Unknown (invalid number)";
         if (card_number[0]=='4'&&(N==13||N==16||N==19))
             vendor=4;
         else
@@ -28,7 +30,7 @@ namespace TASK_123
                 if ((String.Compare(card_number.Substring(0,2),"50")==(0) || String.Compare(card_number.Substring(0,2),"55")==(1)
                                                                           && String.Compare(card_number.Substring(0,2),"70")==(-1))
                                                                              && (N>=12 && N<=19))
-                    vendor=2; // Console.WriteLine("N="+N);
+                vendor=2;
         if (card_number[0]=='3')
             {
             if ((card_number[1]=='4'||card_number[1]=='7')&&(N==15))
@@ -118,7 +120,11 @@ namespace TASK_123
 //        
         public static void Main(string[] args)
         {
-            string card = "50000000000006114"; // test_for_AEcard = "3434 3434 3434 590"; test_for_next = "4561 2612 1234 5459";
+            string card;
+            
+            //card = "3434 3434 3434 590";    // test for AmericanExpress card
+            card = "50000000000006114";    // test for valid number
+            //card = "4561 2612 1234 5459";    // test for next valid number
             
             Console.WriteLine("Vendor of credit card '" + card + "' is:");
             Console.WriteLine(GetCreditCardVendor(card));
@@ -126,7 +132,7 @@ namespace TASK_123
             Console.WriteLine("\nNumber of credit card '" + card + "' is:");
             Console.WriteLine(IsCreditCardNumberValid(card));
             
-            Console.WriteLine("\nNext valid number after card '" + card + "' is:");
+            Console.WriteLine("\nNext valid number after '" + card + "' is:");
             Console.WriteLine(GenerateNextCreditCardNumber(card));
             Console.WriteLine("....||||....||||....");            
 
