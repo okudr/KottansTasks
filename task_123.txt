@@ -19,8 +19,6 @@ namespace TASK_123
                   N--;
                   i--;
                 }
-        if (IsCreditCardNumberValid(card_number)==false)
-            return "Unknown (invalid number)";
         if (card_number[0]=='4'&&(N==13||N==16||N==19))
             vendor=4;
         else
@@ -60,6 +58,7 @@ namespace TASK_123
             default:
                 break;
         }
+    if (vendor!=0 && IsCreditCardNumberValid(card_number)==false) card_vendor="Invalid";        
     return card_vendor;
     }
 //   
@@ -92,6 +91,7 @@ namespace TASK_123
 //
     public static string GenerateNextCreditCardNumber(string next_number)
     {    
+        string check_vendor,next_vendor;
         int p, i;
         int N = next_number.Length;
         for (i = 1; i <= N ; i++)
@@ -100,6 +100,8 @@ namespace TASK_123
                   N--;
                   i--;
                 }
+        check_vendor=GetCreditCardVendor(next_number);
+        //Console.WriteLine(check_vendor);
         do
         {   i = 0;
             do
@@ -113,8 +115,12 @@ namespace TASK_123
             if (i>=N) break;
         }
         while(IsCreditCardNumberValid(next_number)==false);
+        next_vendor=GetCreditCardVendor(next_number);
+        Console.WriteLine(next_vendor);
+        if ((String.Compare(check_vendor,next_vendor)==0 || String.Compare(check_vendor,"Invalid")==0)
+            && String.Compare(next_vendor,"Unknown")!=0) return next_number;
+        else return "No_more_card_number";
         
-        return next_number;
     }  
         
 //        
@@ -122,9 +128,10 @@ namespace TASK_123
         {
             string card;
             
-            //card = "3434 3434 3434 590";    // test for AmericanExpress card
-            card = "50000000000006114";    // test for valid number
-            //card = "4561 2612 1234 5459";    // test for next valid number
+            // card = "3434 3434 3434 590";    // test for AmericanExpress card
+               card = "3499 9999 9999 991";    // test for last number
+            // card = "50000000000006114";    // test for valid number
+            // card = "4561 2612 1234 5459";    // test for next valid number
             
             Console.WriteLine("Vendor of credit card '" + card + "' is:");
             Console.WriteLine(GetCreditCardVendor(card));
