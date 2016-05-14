@@ -10,6 +10,7 @@ namespace TASK_123
 //        
     public static string GetCreditCardVendor(string card_number)
     {   
+        int p, sum = 0;
         int vendor=0;
         string card_vendor="Unknown";
         int N = card_number.Length;
@@ -19,6 +20,16 @@ namespace TASK_123
                   N--;
                   i--;
                 }
+        for (int i = 0; i < N ; i++)
+            { p = card_number[(N-1)-i] - '0';
+              if (i % 2 == 1) 
+                { p = 2*p;
+                  if (p > 9) p = p - 9;
+                }
+              sum = sum + p;
+            }
+        sum = sum % 10;
+
         if (card_number[0]=='4'&&(N==13||N==16||N==19))
             vendor=4;
         else
@@ -58,7 +69,7 @@ namespace TASK_123
             default:
                 break;
         }
-    if (vendor!=0 && IsCreditCardNumberValid(card_number)==false) card_vendor="Invalid";        
+    if (vendor!=0 && sum!=0) card_vendor="Invalid";        
     return card_vendor;
     }
 //   
@@ -84,8 +95,12 @@ namespace TASK_123
             }
         //Console.WriteLine(sum);
         sum = sum % 10;
-        if (sum == 0) return true;
-        else return false;  
+        
+        if (String.Compare(GetCreditCardVendor(valid_number),"Unknown")==0) return false;
+        else if (sum == 0) return true;
+             else return false;
+        //if ((sum == 0) && (String.Compare(GetCreditCardVendor(valid_number),"Unknown")!=0)) return true;
+        //else return false;  
     }
     
 //
@@ -102,6 +117,7 @@ namespace TASK_123
                 }
         check_vendor=GetCreditCardVendor(next_number);
         //Console.WriteLine(check_vendor);
+        if (String.Compare(check_vendor,"Unknown")==0) return "Not_valid_card";
         do
         {   i = 0;
             do
@@ -114,7 +130,7 @@ namespace TASK_123
             while(p==0);
             if (i>=N) break;
         }
-        while(IsCreditCardNumberValid(next_number)==false);
+        while(IsCreditCardNumberValid(next_number)==false && String.Compare(GetCreditCardVendor(next_number),"Unknown")!=0);
         next_vendor=GetCreditCardVendor(next_number);
         Console.WriteLine(next_vendor);
         if ((String.Compare(check_vendor,next_vendor)==0 || String.Compare(check_vendor,"Invalid")==0)
@@ -129,9 +145,10 @@ namespace TASK_123
             string card;
             
             // card = "3434 3434 3434 590";    // test for AmericanExpress card
-               card = "3499 9999 9999 991";    // test for last number
+            // card = "3499 9999 9999 991";    // test for last number
             // card = "50000000000006114";    // test for valid number
             // card = "4561 2612 1234 5459";    // test for next valid number
+               card = "3530 1113 3330 00001";    // test for valid number but unknown vendor
             
             Console.WriteLine("Vendor of credit card '" + card + "' is:");
             Console.WriteLine(GetCreditCardVendor(card));
